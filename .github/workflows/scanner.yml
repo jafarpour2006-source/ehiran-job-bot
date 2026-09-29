@@ -27,5 +27,8 @@ jobs:
       - name: نصب وابستگی‌ها
         run: pip install -r requirements.txt
 
-      - name: اجرای ربات
-        run: python run_once.py
+- name: اجرای ربات
+  env:
+    TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
+  run: python run_once.py
