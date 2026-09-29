@@ -1,12 +1,15 @@
 name: رصد آگهی‌های استخدام بهداشت محیط
 
 on:
+  push:
+    branches:
+      - main
   schedule:
     - cron: "0 */3 * * *"
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   scan:
@@ -19,23 +22,10 @@ jobs:
       - name: نصب Python
         uses: actions/setup-python@v5
         with:
-          python-version: "3.12"
-          cache: "pip"
+          python-version: "3.11"
 
       - name: نصب وابستگی‌ها
         run: pip install -r requirements.txt
 
-      - name: بازیابی بانک اطلاعاتی آگهی‌ها
-        uses: actions/cache@v4
-        with:
-          path: jobs.db
-          key: jobs-db-${{ github.run_id }}
-          restore-keys: |
-            jobs-db-
-
       - name: اجرای ربات
-        env:
-          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          TELEGRAM_CHANNEL_ID: "@behdashtmohitiran"
-          SERPER_API_KEY: ${{ secrets.SERPER_API_KEY }}
         run: python run_once.py
